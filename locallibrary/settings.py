@@ -31,6 +31,10 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    # DJ4E Legacy Apps
+    "catalog.apps.CatalogConfig", # This object can be found in catalog/apps.py
+
+    # Standard apps shipped with django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -104,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Toronto"
 
 USE_I18N = True
 
