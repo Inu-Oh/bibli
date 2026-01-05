@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.urls import reverse
 
@@ -49,3 +51,29 @@ class Book(models.Model):
     def get_absolute_url(self):
         """Returns the URL to access a detail record for a book instance."""
         return reverse('book-detail', args=[str(self.id)])
+
+
+class BookInstance(models.Model):
+    """Model representing a book copy (that can be borrowed from the library)."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+        help_text="Unique ID for this book across whole library")
+    book = models.ForeignKey(Book, on_delete=models.RESTRICT, null=True)
+    imprint = models.CharField(max_length=200)
+    due_back = models.DateField(null=True, blank=True)
+
+    LOAN_STATUS = (
+        ('m', 'Maintenance'),
+        ('o', 'On loan'),
+        ('a', 'Available'),
+        ('r', 'Reserved'),
+    )
+
+    status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True,
+        default='m', help_text="Book availability")
+
+    class Meta:
+        ordering = ['due_back']
+
+    def __str__(self):
+        """String for represing the book instance instance."""
+        return f"{self.id} ({self.book.title})"
