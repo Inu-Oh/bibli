@@ -3,11 +3,37 @@ import uuid
 from django.db import models
 from django.urls import reverse
 
+# Assignment: add language model
+class Language(models.Model):
+    """Model representing a language of books."""
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        help_text="Enter the language of the book instance."
+    )
+
+    def __str__(self):
+        """String for representing the language instance."""
+        return self.name
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular langauge instance."""
+        return reverse('language-detail', args=[str(self.id)])
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                models.functions.Lower('name'),
+                name = 'language_name_case_insensitive_unique',
+                violation_error_message = "Language already exists (case insensitive match)"
+            ),
+    ]
+
 
 class Genre(models.Model):
     """Model representing a book genre."""
     name = models.CharField(
-        max_length = 200,
+        max_length=200,
         unique=True,
         help_text="Enter a book genre (e.g.Sci-Fi, Manga etc)"
     )
@@ -43,6 +69,7 @@ class Book(models.Model):
 
     # Genre class has already been defined so we can specify the object.
     genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
+    language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         """String for representing the book instance."""
