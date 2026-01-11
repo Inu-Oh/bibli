@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .models import Book, Author, BookInstance #, Genre
+from .models import Book, Author, BookInstance, Genre
 
 def index(request):
     """View function for home page of site."""
@@ -10,11 +10,17 @@ def index(request):
     num_instances_available = BookInstance.objects.filter(status__exact='a').count
     num_authors = Author.objects.count()
 
+    # Assignment 5.2
+    num_genres = Genre.objects.all().count()
+    # num_the_books = Book.objects.filter(title__icontains='the').count()
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
+        'num_genres': num_genres,
+        # 'num_the_books': num_the_books,
     }
 
     return render(request, 'index.html', context=context)

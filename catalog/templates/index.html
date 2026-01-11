@@ -1,5 +1,10 @@
 {% extends "base_generic.html" %}
 
+<!--Assignment 5.1-->
+{% block title %}
+    <title>Inu's Little Library App</title>
+{% endblock %}
+
 {% block content %}
     <h1>Local Library Home</h1>
     <p>Welcome to <em>LocalLibrary</em>, a very basic Django app by Inu Oh</p>
@@ -10,5 +15,8 @@
         <li><strong>Copies:</strong> {{ num_instances }} </li>
         <li><strong>Copies available:</strong> {{ num_instances_available }} </li>
         <li><strong>Authors:</strong> {{ num_authors }} </li>
+        <!--Assignment 5.2-->
+        <li><strong>Genres:</strong> {{ num_genres }} </li>
+        <!--<li><strong>Books with Word "the":</strong> {{ num_the_books }} </li>-->
     </ul>
 {% endblock %}
