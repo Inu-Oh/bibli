@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 
 from .models import Book, Author, BookInstance, Genre
+
 
 def index(request):
     """View function for home page of site."""
@@ -24,3 +26,24 @@ def index(request):
     }
 
     return render(request, 'index.html', context=context)
+
+
+class BookListView(ListView):
+    model = Book
+    # Note: How to override standard set variables of the ListView
+    # context_object_name = 'book_list' # your own name for the list as a template variable
+    # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+    # template_name = 'books/my_arbitrary_template_name_list.html' # Specify your own template name/location
+
+    # Override class-based methods to change
+    # def get_queryset(self):
+    #     return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
+
+    # Pass aaddition context context variables to the template
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get the context
+    #     context = super(BookListView, self).get_context_data(**kwargs)
+    #     # Create any data and add it to the context
+    #     context['some_data'] = 'This is just some data'
+    #     return context
+
