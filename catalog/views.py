@@ -30,7 +30,7 @@ def index(request):
 
 class BookListView(ListView):
     model = Book
-
+    paginate_by = 2
     # Note: How to override standard set variables of the ListView
     # context_object_name = 'book_list' # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
