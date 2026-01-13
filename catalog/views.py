@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .models import Book, Author, BookInstance, Genre
 
@@ -30,6 +30,7 @@ def index(request):
 
 class BookListView(ListView):
     model = Book
+
     # Note: How to override standard set variables of the ListView
     # context_object_name = 'book_list' # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
@@ -47,3 +48,6 @@ class BookListView(ListView):
     #     context['some_data'] = 'This is just some data'
     #     return context
 
+
+class BookDetailView(DetailView):
+    model = Book
