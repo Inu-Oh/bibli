@@ -23,6 +23,17 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('', RedirectView.as_view(url='catalog/')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    # Adding accounts/ maps the following 8 URLs to their respective names
+    # accounts/ login/ [name='login']
+    # accounts/ logout/ [name='logout']
+    # accounts/ password_change/ [name='password_change']
+    # accounts/ password_change/done/ [name='password_change_done']
+    # accounts/ password_reset/ [name='password_reset']
+    # accounts/ password_reset/done/ [name='password_reset_done']
+    # accounts/ reset/<uidb64>/<token>/ [name='password_reset_confirm']
+    # accounts/ reset/done/ [name='password_reset_complete']
+
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
 ]
