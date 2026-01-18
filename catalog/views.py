@@ -3,7 +3,7 @@ from django.views.generic import DetailView, ListView
 
 from .models import Book, Author, BookInstance, Genre
 
-
+# @login_required # Easiest way to require login for functions
 def index(request):
     """View function for home page of site."""
 
@@ -34,7 +34,9 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
-class BookListView(ListView):
+class BookListView(ListView): # LoginRequiredMixin easiest way to require login for class views
+    # login_url = '/login/' # specifies an alt location to redirect if user is not authenticated
+    # redirect_field_name = 'redirect_to' # URL parameter instead of next to insert current abs path
     model = Book
     paginate_by = 5
     # Note: How to override standard set variables of the ListView
