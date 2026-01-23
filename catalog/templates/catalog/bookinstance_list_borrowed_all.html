@@ -12,12 +12,18 @@
                     {{ bookinst.book.title }}
                     </a>
                     <span class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-                        ({{ bookinst.due_back }}) - {{ bookinst.borrower }}
+                        ({{ bookinst.due_back }}) -
+                        {% if user.is_staff %} {{ bookinst.borrower }} {% endif %}
                     </span>
+                    {% if perms.catalog.can_mark_returned %} -
+                        <a href="{% url 'renew-book-librarian' bookinst.id %}">
+                            Renew
+                        </a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        No books are currently on loan from the library.
+        <p>There are no books borrowed.</p>
     {% endif %}
 {% endblock %}
