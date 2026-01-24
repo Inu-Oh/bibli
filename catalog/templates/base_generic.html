@@ -33,7 +33,7 @@
                                 action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button id="lo" type="submit"
-                                    class="btn btn-sm btn-outline-primary m-2">
+                                    class="btn btn-sm btn-outline-primary btn-lnk m-2">
                                     Logout
                                 </button>
                             </form>
@@ -54,6 +54,11 @@
                         <li>
                             <a href="{% url 'all-borrowed' %}">All borrowed</a>
                         </li>
+                        {% if perms.catalog.add_author %}
+                        <li>
+                            <a href="{% url 'author-create' %}">Create author</a>
+                        </li>
+                        {% endif %}
                     </ul>
                     {% endif %}
                 {% endblock %}

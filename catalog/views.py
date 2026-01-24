@@ -3,8 +3,9 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from catalog.forms import RenewBookForm
 from .models import Book, Author, BookInstance, Genre
@@ -127,3 +128,35 @@ def renew_book_librarian(request, pk):
     context = { 'form': form, 'book_instance': book_instance, }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
+
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    model = Author
+    fields = [ 'first_name', 'last_name', 'date_of_birth', 'date_of_death' ]
+    # initial = { 'date_of_death': '11/11/2023' } # sets initial value for field
+    permission_required = 'catalog.add_author'
+
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    model = Author
+    # Not recommended (potential security issue if more fields are added)
+    fields = '__all__'
+    permission_required = 'catalog.change_author'
+
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    model = Author
+    #reverse_lazy() is a lazily executed version of reverse(), used here because
+    #we're providing a URL to a class-based view attribute.
+    success_url = reverse_lazy('authors')
+    permission_required = 'catalog.delete_author'
+
+    # we override form_valid to make sure the Author isn't used in any Book
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("author-delete", kwargs={"pk": self.object.pk})
+            )
