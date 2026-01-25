@@ -8,7 +8,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from catalog.forms import RenewBookForm
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Author, BookInstance, Genre, Language
 
 
 def index(request):
@@ -160,3 +160,79 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("author-delete", kwargs={"pk": self.object.pk})
             )
+
+
+class BookInstanceCreate(PermissionRequiredMixin, CreateView):
+    model = BookInstance
+    fields = [ 'book', 'imprint' ]
+    permission_required = 'catalog.add_book_instance'
+
+
+class BookInstanceUpdate(PermissionRequiredMixin, UpdateView):
+    model = BookInstance
+    fields = [ 'book', 'imprint' ]
+    permission_required = 'catalog.change_book_instance'
+
+
+class BookInstanceDelete(PermissionRequiredMixin, DeleteView):
+    model = BookInstance
+    permission_required = 'catalog.delete_book_instance'
+
+    def get_success_url(self):
+        return reverse('book-detail', kwargs={"pk": self.object.book.pk})
+
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = [ 'title', 'author', 'summary', 'isbn', 'genre', 'language' ]
+    permission_required = 'catalog.add_book'
+
+
+class BookUpdate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = [ 'title', 'author', 'summary', 'isbn', 'genre', 'language' ]
+    permission_required = 'catalog.change_book'
+
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    model = Book
+    success_url = reverse_lazy('books')
+    permission_required = 'catalgo.delete_book'
+
+    # make sure that book has not instances
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("book-delete", kwargs={"pk": self.object.pk})
+            )
+
+
+class GenreCreate(PermissionRequiredMixin, CreateView):
+    model = Genre
+    fields = [ 'name' ]
+    permission_required = 'catalog.add_genre'
+
+
+class GenreUpdate(PermissionRequiredMixin, UpdateView):
+    model = Genre
+    fields = [ 'name' ]
+    permission_required = 'catalog.change_genre'
+
+# Keep Genre deletion to admin pages
+
+
+class LanguageCreate(PermissionRequiredMixin, CreateView):
+    model = Language
+    fields = [ 'name' ]
+    permission_required = 'catalog.add_language'
+
+
+class LanguageUpdate(PermissionRequiredMixin, UpdateView):
+    model = Language
+    fields = [ 'name' ]
+    permission_required = 'catalog.change_language'
+
+# Keep Language deletion to admin pages

@@ -16,4 +16,22 @@ urlpatterns = [
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
     path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
     path('author/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
+
+    # Book CRUD
+    path('book/create/', views.BookCreate.as_view(), name='book-create'),
+    path('book/<int:pk>/update/', views.BookUpdate.as_view(), name='book-update'),
+    path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
+
+    # Book Instance CRUD
+    path('bookinst/create/', views.BookInstanceCreate.as_view, name='bookinst-create'),
+    path('bookinst/<int:pk>/update/', views.BookInstanceUpdate.as_view, name='bookinst-update'),
+    path('bookinst/<int:pk>/delete/', views.BookInstanceDelete.as_view, name='bookinst-delete'),
+
+    # Genre CRUD - no delete page except on admin site
+    path('genre/create/', views.GenreCreate.as_view(), name='genre-create'),
+    path('genre/<int:pk>/update/', views.GenreUpdate.as_view(), name='genre-update'),
+
+    # Language: CRUD - no delete page except on admin site
+    path('language/create/', views.LanguageCreate.as_view(), name='language-create'),
+    path('language/<int:pk>/update/', views.LanguageUpdate.as_view(), name='language-update'),
 ]
