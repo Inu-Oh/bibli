@@ -4,7 +4,7 @@
 {% block addinst %}
 {% if perms.catalog.add_bookinstance %}
     <li>
-        <a href="{% url 'bookinst-create' book.pk %}" class="p-3">
+        <a href="{% url 'bookinst-create' book.id %}" class="p-3">
             Add book copy
         </a>
     </li>
