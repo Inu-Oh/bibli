@@ -164,8 +164,21 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class BookInstanceCreate(PermissionRequiredMixin, CreateView):
     model = BookInstance
-    fields = [ 'book', 'imprint' ]
+    fields = [ 'imprint' ]
     permission_required = 'catalog.add_book_instance'
+    template_name = 'catalog/book_instance_form.html'
+
+    def get(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        context = { 'book': book }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        context = { 'book': book }
+
+        if not form.is_valid():
+            pass
 
 
 class BookInstanceUpdate(PermissionRequiredMixin, UpdateView):
@@ -214,6 +227,7 @@ class GenreCreate(PermissionRequiredMixin, CreateView):
     model = Genre
     fields = [ 'name' ]
     permission_required = 'catalog.add_genre'
+    success_url = reverse_lazy('index')
 
 
 class GenreUpdate(PermissionRequiredMixin, UpdateView):
@@ -228,6 +242,7 @@ class LanguageCreate(PermissionRequiredMixin, CreateView):
     model = Language
     fields = [ 'name' ]
     permission_required = 'catalog.add_language'
+    success_url = reverse_lazy('index')
 
 
 class LanguageUpdate(PermissionRequiredMixin, UpdateView):

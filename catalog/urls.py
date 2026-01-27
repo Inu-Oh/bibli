@@ -2,14 +2,19 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Browsing
     path('', views.index, name='index'),
     # access appropriate view function by calling the class method as_view()
     path('books/', views.BookListView.as_view(), name='books'),
     path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
     path('authors/', views.AuthorListView.as_view(), name='authors'),
     path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author-detail'),
+
+    # User vi' 'ews
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
     path('borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'),
+
+    # Librarian views
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
 
     # Author CRUD
@@ -23,7 +28,7 @@ urlpatterns = [
     path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
 
     # Book Instance CRUD
-    path('bookinst/create/', views.BookInstanceCreate.as_view, name='bookinst-create'),
+    path('book/<int:pk>/bookinst/create/', views.BookInstanceCreate.as_view, name='bookinst-create'),
     path('bookinst/<int:pk>/update/', views.BookInstanceUpdate.as_view, name='bookinst-update'),
     path('bookinst/<int:pk>/delete/', views.BookInstanceDelete.as_view, name='bookinst-delete'),
 
