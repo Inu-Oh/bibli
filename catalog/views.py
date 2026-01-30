@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
@@ -130,6 +130,11 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
+class BrowseView(PermissionRequiredMixin, ListView):
+    model = BookInstance
+    permission_required = 'catalog.change_bookinstance'
+
+
 class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
     fields = [ 'first_name', 'last_name', 'date_of_birth', 'date_of_death' ]
@@ -164,7 +169,7 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class BookInstanceCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.add_bookinstance'
-    template_name = 'catalog/book_instance_form.html'
+    template_name = 'catalog/bookinstance_form.html'
 
     def get(self, request, pk):
         book = get_object_or_404(Book, pk=pk)
@@ -182,21 +187,48 @@ class BookInstanceCreate(PermissionRequiredMixin, CreateView):
 
         book_inst = form.save(commit=False)
         book_inst.book = book
+        book_inst.status = 'm'
         book_inst.save()
 
-        success_url = reverse_lazy('book', kwargs={'pk', pk})
+        success_url = reverse_lazy('book-detail', kwargs={'pk': pk})
         return redirect(success_url)
 
 
 class BookInstanceUpdate(PermissionRequiredMixin, UpdateView):
-    model = BookInstance
-    fields = [ 'book', 'imprint' ]
-    permission_required = 'catalog.change_book_instance'
+    permission_required = 'catalog.change_bookinstance'
+    template_name = 'catalog/bookinstance_form.html'
+
+    def get(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        form = BookInstanceForm(instance=bookinst)
+        context = { 'form': form, 'book': bookinst.book }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        book = bookinst.book
+        form = BookInstanceForm(request.POST, instance=bookinst)
+
+        if not form.is_valid():
+            context = { 'form': form, 'book': book }
+            return render(request, self.template_name, context)
+
+        book_inst = form.save(commit=False)
+        book_inst.save()
+
+        success_url = reverse_lazy('book-detail', kwargs={'pk':book.pk})
+        return redirect(success_url)
 
 
 class BookInstanceDelete(PermissionRequiredMixin, DeleteView):
     model = BookInstance
-    permission_required = 'catalog.delete_book_instance'
+    permission_required = 'catalog.delete_bookinstance'
 
     def get_success_url(self):
         return reverse('book-detail', kwargs={"pk": self.object.book.pk})

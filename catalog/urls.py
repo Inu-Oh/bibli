@@ -16,6 +16,7 @@ urlpatterns = [
 
     # Librarian views
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
+    path('browse/', views.BrowseView.as_view(), name='browse-book-copies'),
 
     # Author CRUD
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
@@ -29,8 +30,8 @@ urlpatterns = [
 
     # Book Instance CRUD
     path('book/<int:pk>/bookinst/create/', views.BookInstanceCreate.as_view(), name='bookinst-create'),
-    path('bookinst/<int:pk>/update/', views.BookInstanceUpdate.as_view(), name='bookinst-update'),
-    path('bookinst/<int:pk>/delete/', views.BookInstanceDelete.as_view(), name='bookinst-delete'),
+    path('bookinst/<uuid:pk>/update/', views.BookInstanceUpdate.as_view(), name='bookinst-update'),
+    path('bookinst/<uuid:pk>/delete/', views.BookInstanceDelete.as_view(), name='bookinst-delete'),
 
     # Genre CRUD - no delete page except on admin site
     path('genre/create/', views.GenreCreate.as_view(), name='genre-create'),

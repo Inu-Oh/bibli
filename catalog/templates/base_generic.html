@@ -65,6 +65,11 @@
                         </li>
                         {% endif %}
                         {% block addinst %}{% endblock %}
+                        {% if perms.catalog.change_bookinstance %}
+                        <li>
+                            <a href="{% url 'browse-book-copies' %}">Browse copies</a>
+                        </li>
+                        {% endif %}
                         {% if perms.catalog.add_genre %}
                         <li>
                             <a href="{% url 'genre-create' %}">Create genre</a>

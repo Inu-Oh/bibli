@@ -30,20 +30,8 @@ class RenewBookForm(forms.Form):
 class BookInstanceForm(forms.ModelForm):
     class Meta:
         model = BookInstance
-        fields = ['imprint', 'status']
+        fields = ['imprint']
 
     def __init__(self, *args, **kwargs):
         super(BookInstanceForm, self).__init__(*args, **kwargs)
         self.fields['imprint'].label = "Imprint"
-        self.fields['status'].label = "Status"
-
-    def clean_status(self):
-        data = self.cleaned_data['status']
-
-        if len(data) != 1:
-            raise ValidationError(_('Invalid status - too many characters'))
-
-        if data not in 'moar':
-            raise ValidationError(_(
-                'Invalid status - enter m, o, a, r : maintenance, on loan, available, reserved')
-            )

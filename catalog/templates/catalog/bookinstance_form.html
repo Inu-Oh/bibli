@@ -1,7 +1,10 @@
 {% extends "base_generic.html" %}
 
+
 {% block content %}
-Create instance of the book {{ book }} {{ book.author }}
+<h1>Register / edit book copy</h1>
+<p>Title: <strong>{{ book }}</strong></p>
+<p>Author: {{ book.author }}</p>
 
 <form action="" method="post">
   {% csrf_token %}
