@@ -29,7 +29,7 @@
         class="btn btn-outline-primary mx-3" >Add a copy</a> </h4>
     {% for copy in book.bookinstance_set.all %}
         <hr />
-        <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+        <p class="{% if copy.status == 'a' %}text-success fw-bold{% elif copy.status == 'm' %}text-danger fw-bold{% else %}text-warning fw-bold{% endif %}">
             {{ copy.get_status_display }}
         </p>
         {% if copy.status != 'a' %}

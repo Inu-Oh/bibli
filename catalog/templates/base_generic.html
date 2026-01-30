@@ -54,6 +54,11 @@
                         <li>
                             <a href="{% url 'all-borrowed' %}">All borrowed</a>
                         </li>
+                        {% if perms.catalog.change_bookinstance %}
+                        <li>
+                            <a href="{% url 'book-manager' %}">Manage books</a>
+                        </li>
+                        {% endif %}
                         {% if perms.catalog.add_author %}
                         <li>
                             <a href="{% url 'author-create' %}">Create author</a>
@@ -65,11 +70,6 @@
                         </li>
                         {% endif %}
                         {% block addinst %}{% endblock %}
-                        {% if perms.catalog.change_bookinstance %}
-                        <li>
-                            <a href="{% url 'browse-book-copies' %}">Browse copies</a>
-                        </li>
-                        {% endif %}
                         {% if perms.catalog.add_genre %}
                         <li>
                             <a href="{% url 'genre-create' %}">Create genre</a>

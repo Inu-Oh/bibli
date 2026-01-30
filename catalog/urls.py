@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Librarian views
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
-    path('browse/', views.BrowseView.as_view(), name='browse-book-copies'),
+    path('manager/', views.BrowseView.as_view(), name='book-manager'),
 
     # Author CRUD
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
