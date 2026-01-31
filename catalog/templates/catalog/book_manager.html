@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+<h1>Browse book copies</h1>
+
+<header style="float:right" class="me-5">
+    <!-- Search button https://www.w3schools.com/howto/howto_css_search_button.asp -->
+    <form>
+        <input type="text" placeholder="Search ..." name="search"
+            {% if search %} value="{{ search }}" {% endif %} >
+        <button type="submit"><i class="fa fa-search"></i></button>
+        <a href="{% url 'book-manager' %}"><i class="fa fa-undo"></i></a>
+    </form>
+</header>
+
+<main>
+{% for copy in bookinstance_list %}
+    <p class="pb-3">
+        <a href="{% url 'book-detail' copy.book_id %}">
+            {{ copy.title }}
+        </a> by
+        <a href="{{ copy.author_absolute_url }}">
+            {{ copy.author }}
+        </a><br>
+        <strong>Langauge: </strong> {{ copy.language }}
+        <strong>Imprint</strong>: {{ copy.imprint }}<br>
+        <strong>Status</strong>: {{ copy.status }}
+        <strong>ID</strong>: {{ copy.id }}<br>
+        <a href=""
+            class="btn btn-sm btn-outline-primary">Change status</a>
+        <a href=""
+            class="btn btn-sm btn-outline-primary">Borrow copy</a>
+        <a href=""
+            class="btn btn-sm btn-outline-primary">Edit copy</a>
+        <a href=""
+            class="btn btn-sm btn-outline-primary">Delete copy</a>
+    </p>
+{% endfor %}
+</main>
+
+{% endblock %}
