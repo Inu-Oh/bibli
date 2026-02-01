@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -130,40 +131,23 @@ def renew_book_librarian(request, pk):
 
 
 class BrowseView(PermissionRequiredMixin, View):
+    model = BookInstance
     permission_required = 'catalog.change_bookinstance'
+    template_name = 'catalog/book_manager.html'
     paginate_by = 20
 
     def get(self, request):
         search_val = request.GET.get("search", False)
-        object_list = BookInstance.objects.all()
-        bookinst_list = []
-        for obj in object_list:
-            for string_val in [
-                obj.book.title,
-                obj.book.author.last_name,
-                obj.book.author.first_name,
-                obj.book.genre.name,
-                obj.book.language.name
-            ]:
-                print("string_val:", string_val)
-                if search_val.lower() in string_val.lower():
-                    continue
-            bookinst = {}
-            bookinst['id'] = obj.id
-            bookinst['title'] = obj.book.title
-            bookinst['book_id'] = obj.book.id
-            bookinst['author'] = obj.book.author.last_name + ', ' + obj.book.author.first_name
-            bookinst['author_absolute_url'] = obj.book.author.get_absolute_url
-            bookinst['genre'] = obj.book.genre.name
-            bookinst['language'] = obj.book.language.name
-            bookinst['imprint'] = obj.imprint
-            bookinst['status'] = obj.get_status_display
-            bookinst_list.append(bookinst)
-
-            bookinstance_list = sorted(bookinst_list, key=lambda x: x['title'])
-
-        context = { 'bookinstance_list': bookinstance_list }
-        return render(request, 'catalog/book_manager.html', context)
+        if search_val:
+            query = Q(book__title__icontains=search_val) | (Q(book__author__first_name__icontains=search_val)) | (Q(book__author__last_name__icontains=search_val)) | (Q(book__genre__name__icontains=search_val)) | (Q(book__language__name__icontains=search_val))
+            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('-status')
+        else:
+            bookinstance_list = BookInstance.objects.all().order_by('-status')
+        context = {
+            'bookinstance_list': bookinstance_list,
+            'search': search_val
+        }
+        return render(request, self.template_name, context)
 
 
 

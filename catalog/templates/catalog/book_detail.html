@@ -44,7 +44,7 @@
                 <strong>ID: </strong> {{ copy.id }}
                 {% if copy.status == 'a' or copy.status == 'm' %}
                 <a href="{% url 'bookinst-delete' copy.id %}"
-                    class="btn btn-sm btn-outline-danger mx-3">Delete copy</a>
+                    class="btn btn-sm btn-outline-danger mx-3 fw-bold">Delete copy</a>
                 {% endif %}
             </p>
     {% endfor %}
