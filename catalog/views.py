@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from catalog.forms import BookInstanceForm, RenewBookForm
+from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm
 from .models import Book, Author, BookInstance, Genre, Language
 
 
@@ -140,15 +140,46 @@ class BrowseView(PermissionRequiredMixin, View):
         search_val = request.GET.get("search", False)
         if search_val:
             query = Q(book__title__icontains=search_val) | (Q(book__author__first_name__icontains=search_val)) | (Q(book__author__last_name__icontains=search_val)) | (Q(book__genre__name__icontains=search_val)) | (Q(book__language__name__icontains=search_val))
-            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('-status')
+            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('status')
         else:
-            bookinstance_list = BookInstance.objects.all().order_by('-status')
-        context = {
-            'bookinstance_list': bookinstance_list,
-            'search': search_val
-        }
+            bookinstance_list = BookInstance.objects.all().order_by('status')
+        context = { 'bookinstance_list': bookinstance_list }
         return render(request, self.template_name, context)
 
+
+class BorrowView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.change_bookinstance'
+    template_name = 'catalog/borrow_book_form.html'
+
+    def get(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        form = BorrowBookForm(instance=bookinst)
+        due_back = datetime.date.today() + datetime.timedelta(weeks=3)
+        context = { 'form': form, 'bookinst': bookinst, 'due_back': due_back }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        book = bookinst.book
+        form = BorrowBookForm(request.POST, instance=bookinst)
+
+        if not form.is_valid():
+            context = { 'form': form, 'bookinst': bookinst }
+            return render(request, self.template_name, context)
+
+        book_inst = form.save(commit=False)
+        book_inst.status = 'o'
+        book_inst.due_back = datetime.date.today() + datetime.timedelta(weeks=3)
+        book_inst.save()
+
+        success_url = reverse_lazy('book-detail', kwargs={'pk':book.pk})
+        return redirect(success_url)
 
 
 class AuthorCreate(PermissionRequiredMixin, CreateView):

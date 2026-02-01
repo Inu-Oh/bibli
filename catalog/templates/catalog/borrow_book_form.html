@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+
+<h1>Borrow copy: {{ bookinst.book.title }} </h1>
+
+<p><strong>Author:</strong> {{ bookinst.book.author }}</p>
+<p><strong>Imprint:</strong> {{ bookinst.imprint }}</p>
+<p><strong>ID:</strong> {{ bookinst.id }}</p>
+<br>
+<p>Book will be due back {{ due_back }}</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

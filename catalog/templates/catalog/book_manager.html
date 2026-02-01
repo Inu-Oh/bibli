@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<h1>Browse book copies</h1>
+<h1>Manage books in library</h1>
 
 <header style="float:right" class="me-5">
     <!-- Search button https://www.w3schools.com/howto/howto_css_search_button.asp -->
@@ -30,13 +30,15 @@
         </a> ({{ copy.book.genre.name }})<br>
         <strong>Genre: </strong> {{ copy.book.genre.name }}
         <strong>Langauge: </strong> {{ copy.book.language.name }}
-        <strong>Imprint</strong>: {{ copy.imprint }}<br>
-        <strong>Status</strong>: {{ copy.status }}
-        <strong>ID</strong>: {{ copy.id }}<br>
+        <strong>Imprint:</strong> {{ copy.imprint }}<br>
+        <strong>Status:</strong> {{ copy.get_status_display }}
+        <strong>ID:</strong> {{ copy.id }}<br>
         <a href=""
             class="btn btn-sm btn-outline-primary">Change status</a>
-        <a href=""
+        {% if copy.status == 'a' %}
+        <a href="{% url 'borrow-book' copy.id %}"
             class="btn btn-sm btn-outline-primary">Borrow copy</a>
+        {% endif %}
         <a href=""
             class="btn btn-sm btn-outline-success">Edit copy</a>
         {% if copy.status == 'a' or copy.status == 'm' %}
