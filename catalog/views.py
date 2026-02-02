@@ -143,13 +143,13 @@ class BrowseView(PermissionRequiredMixin, View):
             bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('status')
         else:
             bookinstance_list = BookInstance.objects.all().order_by('status')
-        context = { 'bookinstance_list': bookinstance_list }
+        context = { 'bookinstance_list': bookinstance_list, 'search': search_val }
         return render(request, self.template_name, context)
 
 
-class BorrowView(PermissionRequiredMixin, UpdateView):
+class LoanView(PermissionRequiredMixin, UpdateView):
     permission_required = 'catalog.change_bookinstance'
-    template_name = 'catalog/borrow_book_form.html'
+    template_name = 'catalog/lend_book_form.html'
 
     def get(self, request, pk):
         try:

@@ -22,28 +22,29 @@
 <main>
 {% for copy in bookinstance_list %}
     <p class="pb-3">
-        <a href="{% url 'book-detail' copy.book.id %}">
+        <a href="{% url 'book-detail' copy.book.id %}" class="fs-5">
             {{ copy.book.title }}
         </a> by
-        <a href="{{ copy.book.author.get_absolute_url }}">
+        <a href="{{ copy.book.author.get_absolute_url }}" class="fs-5">
             {{ copy.book.author.last_name }}, {{ copy.book.author.first_name }}
-        </a> ({{ copy.book.genre.name }})<br>
-        <strong>Genre: </strong> {{ copy.book.genre.name }}
-        <strong>Langauge: </strong> {{ copy.book.language.name }}
-        <strong>Imprint:</strong> {{ copy.imprint }}<br>
-        <strong>Status:</strong> {{ copy.get_status_display }}
-        <strong>ID:</strong> {{ copy.id }}<br>
+        </a><br>
+        <strong class="p-2">Genre: </strong>
+            {{ copy.book.genre.all|join:" &#8226; " }}<br>
+        <strong class="p-2">Langauge: </strong> {{ copy.book.language.name }}<br>
+        <strong class="p-2">Imprint:</strong> {{ copy.imprint }}<br>
+        <strong class="p-2">Status:</strong> {{ copy.get_status_display }}<br>
+        <strong class="p-2">ID:</strong> {{ copy.id }}<br>
         <a href=""
-            class="btn btn-sm btn-outline-primary">Change status</a>
+            class="btn btn-sm btn-outline-primary m-1">Change status</a>
         {% if copy.status == 'a' %}
-        <a href="{% url 'borrow-book' copy.id %}"
-            class="btn btn-sm btn-outline-primary">Borrow copy</a>
+        <a href="{% url 'loan-book' copy.id %}"
+            class="btn btn-sm btn-outline-primary m-1">Lend out copy</a>
         {% endif %}
         <a href=""
-            class="btn btn-sm btn-outline-success">Edit copy</a>
+            class="btn btn-sm btn-outline-success m-1">Edit copy</a>
         {% if copy.status == 'a' or copy.status == 'm' %}
         <a href="{% url 'bookinst-delete' copy.id %}"
-            class="btn btn-sm btn-outline-danger fw-bold">Delete copy</a>
+            class="btn btn-sm btn-outline-danger fw-bold m-1">Delete copy</a>
         {% endif %}
     </p>
 {% endfor %}
