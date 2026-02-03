@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm
+from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm, StatusUpdateForm
 from .models import Book, Author, BookInstance, Genre, Language
 
 
@@ -46,7 +46,7 @@ class BookListView(ListView): # LoginRequiredMixin easiest way to require login 
     # login_url = '/login/' # specifies an alt location to redirect if user is not authenticated
     # redirect_field_name = 'redirect_to' # URL parameter instead of next to insert current abs path
     model = Book
-    paginate_by = 5
+    paginate_by = 10
     # Note: How to override standard set variables of the ListView
     # context_object_name = 'book_list' # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
@@ -266,7 +266,40 @@ class BookInstanceUpdate(PermissionRequiredMixin, UpdateView):
             context = { 'form': form, 'book': book }
             return render(request, self.template_name, context)
 
+        form.save()
+
+        success_url = reverse_lazy('book-detail', kwargs={'pk':book.pk})
+        return redirect(success_url)
+
+
+class BookInstanceStatusUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.change_bookinstance'
+    template_name = 'catalog/bookinstance_status_form.html'
+
+    def get(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        form = StatusUpdateForm(instance=bookinst)
+        context = { 'form': form, 'book': bookinst.book }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        book = bookinst.book
+        form = StatusUpdateForm(request.POST, instance=bookinst)
+
+        if not form.is_valid():
+            context = { 'form': form, 'book': book }
+            return render(request, self.template_name, context)
+
         book_inst = form.save(commit=False)
+        book_inst.due_back = None
+        book_inst.borrower = None
         book_inst.save()
 
         success_url = reverse_lazy('book-detail', kwargs={'pk':book.pk})

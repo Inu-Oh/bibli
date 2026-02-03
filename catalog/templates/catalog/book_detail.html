@@ -25,29 +25,47 @@
 <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
 
 <div style="margin-left:20px;margin-top:20px">
-    <h4>Copies <a href="{% url 'bookinst-create' book.pk%}"
-        class="btn btn-outline-primary mx-3" >Add a copy</a> </h4>
+    <h4>Copies
+        {% if perms.catalog.add_bookinstance %}
+            <a href="{% url 'bookinst-create' book.pk %}"
+                class="btn btn-outline-primary mx-3" >
+                Add a copy
+            </a>
+        {% endif %}
+    </h4>
     {% for copy in book.bookinstance_set.all %}
         <hr />
         <p class="{% if copy.status == 'a' %}text-success fw-bold{% elif copy.status == 'm' %}text-danger fw-bold{% else %}text-warning fw-bold{% endif %}">
             {{ copy.get_status_display }}
-        {% if copy.status == 'a' %}
+        {% if perms.catalog.change_bookinstance and copy.status == 'a' %}
         <a href="{% url 'loan-book' copy.id %}"
             class="btn btn-sm btn-outline-primary mx-3">Lend out copy</a>
-        {% elif copy.status == 'o' %}
-            <span class="text-secondary fw-normal p-3">
-                Due to be returned: {{ copy.due_back }}
-            </span>
+            {% if copy.status == 'o' %}
+                <span class="text-secondary fw-normal p-3">
+                    Due to be returned: {{ copy.due_back }}
+                </span>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'status-update' copy.id %}"
+                class="btn btn-sm btn-outline-primary mx-3">
+                {% if copy.status == 'o' %}
+                    Return copy
+                {% else %}
+                    Change status
+                {% endif %}
+            </a>
         {% endif %}
         </p>
         <p>
             <strong>Imprint:</strong> {{ copy.imprint }}
-            <a href="{% url 'bookinst-update' copy.id %}"
-                class="btn btn-sm btn-outline-primary mx-3">Edit imprint</a>
+            {% if perms.catalog.change_bookinstance %}
+                <a href="{% url 'bookinst-update' copy.id %}"
+                    class="btn btn-sm btn-outline-success mx-3">Edit imprint</a>
+            {% endif %}
         </p>
         <p class="text-muted">
             <strong>ID: </strong> {{ copy.id }}
-            {% if copy.status == 'a' or copy.status == 'm' %}
+            {% if perms.catalog.delete_bookinstance and copy.status == 'a' or perms.catalog.delete_bookinstance and copy.status == 'm' %}
             <a href="{% url 'bookinst-delete' copy.id %}"
                 class="btn btn-sm btn-outline-danger mx-3 fw-bold">Delete copy</a>
             {% endif %}

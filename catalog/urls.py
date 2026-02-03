@@ -18,6 +18,8 @@ urlpatterns = [
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
     path('manager/', views.BrowseView.as_view(), name='book-manager'),
     path('bookinst/<uuid:pk>/loan/', views.LoanView.as_view(), name='loan-book'),
+    path('bookinst/<uuid:pk>/change_status/',
+        views.BookInstanceStatusUpdate.as_view(), name='status-update'),
 
     # Author CRUD
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),

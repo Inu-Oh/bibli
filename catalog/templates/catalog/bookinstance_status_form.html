@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+
+<h1>Borrow copy: {{ bookinst.book.title }} </h1>
+
+<p><strong>Author:</strong> {{ bookinst.book.author }}</p>
+<p><strong>Imprint:</strong> {{ bookinst.imprint }}</p>
+<p><strong>ID:</strong> {{ bookinst.id }}</p>
+<br>
+<p class="text-danger fw-bold">
+    Warning: The copy's due back date will be set to null and<br> book will be
+    set as returned by borrower,<br> i.e. borrower will be set to null.
+</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

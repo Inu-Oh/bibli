@@ -37,6 +37,16 @@ class BookInstanceForm(forms.ModelForm):
         self.fields['imprint'].label = "Imprint"
 
 
+class StatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = BookInstance
+        fields = ['status']
+
+    def __init__(self, *args, **kwargs):
+        super(StatusUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['status'].label = "Status"
+
+
 class BorrowBookForm(forms.ModelForm):
     class Meta:
         model = BookInstance
