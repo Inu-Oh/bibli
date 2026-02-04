@@ -118,9 +118,6 @@ class BookInstance(models.Model):
         """Determines if the book is overdue based on due date and current date"""
         return bool(self.due_back and date.today() > self.due_back)
 
-    def get_search_string(self):
-        return self.book.title + ' ' + self.book.author.first_name + ' ' + self.book.author.last_name + ' ' + self.book.genre + ' ' + self.book.language
-
     def __str__(self):
         """String for represing the book instance instance."""
         return f"{self.id} ({self.book.title})"

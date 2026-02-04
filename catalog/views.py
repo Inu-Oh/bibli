@@ -130,19 +130,18 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
-class BrowseView(PermissionRequiredMixin, View):
+class BrowseView(PermissionRequiredMixin, ListView):
     model = BookInstance
     permission_required = 'catalog.change_bookinstance'
     template_name = 'catalog/book_manager.html'
-    paginate_by = 20
 
     def get(self, request):
         search_val = request.GET.get("search", False)
         if search_val:
             query = Q(book__title__icontains=search_val) | (Q(book__author__first_name__icontains=search_val)) | (Q(book__author__last_name__icontains=search_val)) | (Q(book__genre__name__icontains=search_val)) | (Q(book__language__name__icontains=search_val))
-            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('status')
+            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('status')[:15]
         else:
-            bookinstance_list = BookInstance.objects.all().order_by('status')
+            bookinstance_list = []
         context = { 'bookinstance_list': bookinstance_list, 'search': search_val }
         return render(request, self.template_name, context)
 

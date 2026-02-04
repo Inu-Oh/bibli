@@ -28,26 +28,25 @@
         <a href="{{ copy.book.author.get_absolute_url }}" class="fs-5">
             {{ copy.book.author.last_name }}, {{ copy.book.author.first_name }}
         </a><br>
-        <strong class="p-2">Genre: </strong>
-            {{ copy.book.genre.all|join:" &#8226; " }}<br>
-        <strong class="p-2">Langauge: </strong> {{ copy.book.language.name }}<br>
-        <strong class="p-2">Imprint:</strong> {{ copy.imprint }}<br>
-        <strong class="p-2">Status:</strong> {{ copy.get_status_display }}<br>
-        <strong class="p-2">ID:</strong> {{ copy.id }}<br>
+        <strong class="p-2 ms-2">Genre: </strong>
+            {{ copy.book.genre.all|join:" &#8226; " }}
+        <strong class="p-2 ms-2">Langauge: </strong> {{ copy.book.language.name }}<br>
+        <strong class="p-2 ms-2">Imprint:</strong> {{ copy.imprint }}
+        <strong class="p-2 ms-2">Status:</strong> {{ copy.get_status_display }}<br>
+        <strong class="p-2 ms-2">ID:</strong> {{ copy.id }}<br>
         {% if perms.catalog.change_bookinstance %}
         {% if copy.status == 'a' %}
             <a href="{% url 'loan-book' copy.id %}"
                 class="btn btn-sm btn-outline-primary m-1">Lend out copy</a>
-        {% else %}
-            <a href="{% url 'status-update' copy.id %}"
-                class="btn btn-sm btn-outline-primary m-1">
-                {% if copy.status == 'o' %}
-                    Return copy
-                {% else %}
-                    Change status
-                {% endif %}
-            </a>
         {% endif %}
+        <a href="{% url 'status-update' copy.id %}"
+            class="btn btn-sm btn-outline-primary m-1">
+            {% if copy.status == 'o' %}
+                Return copy
+            {% else %}
+                Change status
+            {% endif %}
+        </a>
         {% if copy.status != 'o' %}
         <a href="{% url 'bookinst-update' copy.id %}"
             class="btn btn-sm btn-outline-success m-1">Edit imprint</a>
@@ -58,7 +57,14 @@
                 class="btn btn-sm btn-outline-danger fw-bold m-1">Delete copy</a>
         {% endif %}{% endif %}
     </p>
+{% empty %}
+    {% if search %}
+        <h3 class="pt-5">No results found</h3>
+    {% else %}
+        <h3 class="pt-5">Search to see results</h3>
+    {% endif %}
 {% endfor %}
+
 </main>
 
 {% endblock %}

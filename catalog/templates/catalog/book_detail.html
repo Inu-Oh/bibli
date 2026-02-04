@@ -45,7 +45,7 @@
                     Due to be returned: {{ copy.due_back }}
                 </span>
             {% endif %}
-        {% else %}
+        {% endif %}
             <a href="{% url 'status-update' copy.id %}"
                 class="btn btn-sm btn-outline-primary mx-3">
                 {% if copy.status == 'o' %}
@@ -54,7 +54,7 @@
                     Change status
                 {% endif %}
             </a>
-        {% endif %}
+
         </p>
         <p>
             <strong>Imprint:</strong> {{ copy.imprint }}
