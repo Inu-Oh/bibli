@@ -57,7 +57,7 @@ def index(request):
     # def get_queryset(self):
     #     return Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
 
-    # Pass aaddition context context variables to the template
+    # Pass additional context variables to the template
     # def get_context_data(self, **kwargs):
     #     # Call the base implementation first to get the context
     #     context = super(BookListView, self).get_context_data(**kwargs)
@@ -153,7 +153,7 @@ def renew_book_librarian(request, pk):
 
 class LoanView(PermissionRequiredMixin, UpdateView):
     permission_required = 'catalog.change_bookinstance'
-    template_name = 'catalog/lend_book_form.html'
+    template_name = 'catalog/bookinstance_loan_form.html'
 
     def get(self, request, pk):
         try:
