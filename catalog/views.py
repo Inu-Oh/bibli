@@ -2,10 +2,11 @@ import datetime
 
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, View
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm, StatusUpdateForm
@@ -42,11 +43,11 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
-class BookListView(ListView): # LoginRequiredMixin easiest way to require login for class views
-    # login_url = '/login/' # specifies an alt location to redirect if user is not authenticated
-    # redirect_field_name = 'redirect_to' # URL parameter instead of next to insert current abs path
-    model = Book
-    paginate_by = 10
+# class BookListView(ListView): # LoginRequiredMixin easiest way to require login for class views
+#     # login_url = '/login/' # specifies an alt location to redirect if user is not authenticated
+#     # redirect_field_name = 'redirect_to' # URL parameter instead of next to insert current abs path
+#     model = Book
+#     paginate_by = 10
     # Note: How to override standard set variables of the ListView
     # context_object_name = 'book_list' # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains='war')[:5] # Get 5 books containing the title war
@@ -63,6 +64,26 @@ class BookListView(ListView): # LoginRequiredMixin easiest way to require login 
     #     # Create any data and add it to the context
     #     context['some_data'] = 'This is just some data'
     #     return context
+
+def book_listing(request):
+    search_val = request.GET.get("search", False)
+    if search_val:
+        query = Q(title__icontains=search_val) | (Q(author__first_name__icontains=search_val)) | (Q(author__last_name__icontains=search_val)) | (Q(genre__name__icontains=search_val)) | (Q(language__name__icontains=search_val))
+        book_list = Book.objects.filter(query).select_related().distinct().order_by('title')[:10]
+    else:
+        book_list = Book.objects.all()
+
+    # pagination
+    paginator = Paginator(book_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'search': search_val,
+        'page_obj': page_obj,
+        'is_paginated': True,
+    }
+    return render(request, 'catalog/book_list.html', context)
 
 
 class BookDetailView(DetailView):
@@ -128,22 +149,6 @@ def renew_book_librarian(request, pk):
     context = { 'form': form, 'book_instance': book_instance, }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
-
-
-class BrowseView(PermissionRequiredMixin, ListView):
-    model = BookInstance
-    permission_required = 'catalog.change_bookinstance'
-    template_name = 'catalog/book_manager.html'
-
-    def get(self, request):
-        search_val = request.GET.get("search", False)
-        if search_val:
-            query = Q(book__title__icontains=search_val) | (Q(book__author__first_name__icontains=search_val)) | (Q(book__author__last_name__icontains=search_val)) | (Q(book__genre__name__icontains=search_val)) | (Q(book__language__name__icontains=search_val))
-            bookinstance_list = BookInstance.objects.filter(query).select_related().distinct().order_by('status')[:15]
-        else:
-            bookinstance_list = []
-        context = { 'bookinstance_list': bookinstance_list, 'search': search_val }
-        return render(request, self.template_name, context)
 
 
 class LoanView(PermissionRequiredMixin, UpdateView):

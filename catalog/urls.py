@@ -5,7 +5,7 @@ urlpatterns = [
     # Browsing
     path('', views.index, name='index'),
     # access appropriate view function by calling the class method as_view()
-    path('books/', views.BookListView.as_view(), name='books'),
+    path('books/', views.book_listing, name='books'),
     path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail'),
     path('authors/', views.AuthorListView.as_view(), name='authors'),
     path('author/<int:pk>', views.AuthorDetailView.as_view(), name='author-detail'),
@@ -16,7 +16,6 @@ urlpatterns = [
 
     # Librarian views
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
-    path('manager/', views.BrowseView.as_view(), name='book-manager'),
     path('bookinst/<uuid:pk>/loan/', views.LoanView.as_view(), name='loan-book'),
     path('bookinst/<uuid:pk>/change_status/',
         views.BookInstanceStatusUpdate.as_view(), name='status-update'),

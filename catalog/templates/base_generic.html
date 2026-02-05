@@ -56,11 +56,7 @@
                         <li>
                             <a href="{% url 'all-borrowed' %}">All borrowed</a>
                         </li>
-                        {% if perms.catalog.change_bookinstance %}
-                        <li>
-                            <a href="{% url 'book-manager' %}">Manage books</a>
-                        </li>
-                        {% endif %}
+
                         {% if perms.catalog.add_author %}
                         <li>
                             <a href="{% url 'author-create' %}">Create author</a>
