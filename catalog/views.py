@@ -346,17 +346,24 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
             )
 
 
+class GenreListView(PermissionRequiredMixin, ListView):
+    model = Genre
+    permission_required = 'catalog.change_genre'
+    paginate_by = 10
+
+
 class GenreCreate(PermissionRequiredMixin, CreateView):
     model = Genre
     fields = [ 'name' ]
     permission_required = 'catalog.add_genre'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('genres')
 
 
 class GenreUpdate(PermissionRequiredMixin, UpdateView):
     model = Genre
     fields = [ 'name' ]
     permission_required = 'catalog.change_genre'
+    success_url = reverse_lazy('genres')
 
 # Keep Genre deletion to admin pages
 

@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+    <h1>
+        <span class="px-3">Genre list</span>
+        {% if perms.catalog.add_genre %}
+            <a class="btn btn-outline-primary mb-2 "
+                href="{% url 'genre-create' %}">Add new genre</a>
+        {% endif %}
+    </h1>
+    {% if genre_list %}
+        <ul>
+        {% for genre in genre_list %}
+            <li>
+                {{ genre }}
+                <a href="{% url 'genre-update' genre.id %}"
+                    class="mx-3">
+                    <i class="far fa-edit"></i>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no genres listed.</p>
+    {% endif %}
+{% endblock %}

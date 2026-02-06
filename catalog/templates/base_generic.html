@@ -68,9 +68,9 @@
                         </li>
                         {% endif %}
                         {% block addinst %}{% endblock %}
-                        {% if perms.catalog.add_genre %}
+                        {% if perms.catalog.change_genre %}
                         <li>
-                            <a href="{% url 'genre-create' %}">Create genre</a>
+                            <a href="{% url 'genres' %}">Genre Admin</a>
                         </li>
                         {% endif %}
                         {% if perms.catalog.add_language %}

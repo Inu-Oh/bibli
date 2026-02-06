@@ -36,6 +36,7 @@ urlpatterns = [
     path('bookinst/<uuid:pk>/delete/', views.BookInstanceDelete.as_view(), name='bookinst-delete'),
 
     # Genre CRUD - no delete page except on admin site
+    path('genres/', views.GenreListView.as_view(), name='genres'),
     path('genre/create/', views.GenreCreate.as_view(), name='genre-create'),
     path('genre/<int:pk>/update/', views.GenreUpdate.as_view(), name='genre-update'),
 
