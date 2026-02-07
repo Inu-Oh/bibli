@@ -17,8 +17,10 @@
 
     <form action="" method="POST">
         {% csrf_token %}
-        <input type="submit" action="" value="Yes, delete"
-            class="btn btn-sm btn-outline-primary">
+        <input type="submit" action="" value="Yes, delete."
+            class="btn btn-sm btn-outline-success">
+        <a href="{% url 'book-detail' book.id %}"
+            class="btn btn-sm btn-outline-danger">Cancel</a>
     </form>
 {% endif %}
 

@@ -4,7 +4,7 @@
     {{ block.super }}
 
     {% if perms.catalog.change_author or perms.catalog.delete_author %}
-    <hr>
+    <hr>Author admin
     <ul class="sidebar-nav">
 
         {% if perms.catalog.change_author %}

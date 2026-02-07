@@ -19,7 +19,9 @@
     <form action="" method="POST">
         {% csrf_token %}
         <input type="submit" action="" value="Yes, delete."
-            class="btn btn-sm btn-outline-primary">
+            class="btn btn-sm btn-outline-success">
+        <a href="{% url 'author-detail' author.id %}"
+            class="btn btn-sm btn-outline-danger">Cancel</a>
     </form>
 {% endif %}
 
