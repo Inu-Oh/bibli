@@ -286,7 +286,7 @@ class BookInstanceStatusUpdate(PermissionRequiredMixin, UpdateView):
         except:
             raise Http404
         form = StatusUpdateForm(instance=bookinst)
-        context = { 'form': form, 'book': bookinst.book }
+        context = { 'form': form, 'bookinst': bookinst }
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
@@ -294,11 +294,10 @@ class BookInstanceStatusUpdate(PermissionRequiredMixin, UpdateView):
             bookinst = BookInstance.objects.get(id=pk)
         except:
             raise Http404
-        book = bookinst.book
         form = StatusUpdateForm(request.POST, instance=bookinst)
 
         if not form.is_valid():
-            context = { 'form': form, 'book': book }
+            context = { 'form': form, 'bookinst': bookinst }
             return render(request, self.template_name, context)
 
         book_inst = form.save(commit=False)

@@ -67,7 +67,6 @@
                             <a href="{% url 'book-create' %}">Create book</a>
                         </li>
                         {% endif %}
-                        {% block addinst %}{% endblock %}
                         {% if perms.catalog.change_genre %}
                         <li>
                             <a href="{% url 'genres' %}">Genre admin</a>
