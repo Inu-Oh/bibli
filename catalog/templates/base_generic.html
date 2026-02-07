@@ -70,14 +70,12 @@
                         {% block addinst %}{% endblock %}
                         {% if perms.catalog.change_genre %}
                         <li>
-                            <a href="{% url 'genres' %}">Genre Admin</a>
+                            <a href="{% url 'genres' %}">Genre admin</a>
                         </li>
                         {% endif %}
-                        {% if perms.catalog.add_language %}
+                        {% if perms.catalog.change_language %}
                         <li>
-                            <a href="{% url 'language-create' %}">
-                                Create language
-                            </a>
+                            <a href="{% url 'languages' %}">Language admin</a>
                         </li>
                         {% endif %}
                     </ul>

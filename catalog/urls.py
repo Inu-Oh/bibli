@@ -41,6 +41,7 @@ urlpatterns = [
     path('genre/<int:pk>/update/', views.GenreUpdate.as_view(), name='genre-update'),
 
     # Language: CRUD - no delete page except on admin site
+    path('languages/', views.LanguageListView.as_view(), name='languages'),
     path('language/create/', views.LanguageCreate.as_view(), name='language-create'),
     path('language/<int:pk>/update/', views.LanguageUpdate.as_view(), name='language-update'),
 ]

@@ -3,18 +3,18 @@
 
 {% block content %}
     <h1>
-        <span class="pe-5">Genre list</span>
-        {% if perms.catalog.add_genre %}
+        <span class="pe-5">Language list</span>
+        {% if perms.catalog.add_language %}
             <a class="btn btn-outline-primary mb-2 "
-                href="{% url 'genre-create' %}">Add new genre</a>
+                href="{% url 'language-create' %}">Add new language</a>
         {% endif %}
     </h1>
-    {% if genre_list %}
+    {% if language_list %}
         <ul>
-        {% for genre in genre_list %}
+        {% for lang in language_list %}
             <li>
-                {{ genre }}
-                <a href="{% url 'genre-update' genre.id %}"
+                {{ lang }}
+                <a href="{% url 'language-update' lang.id %}"
                     class="mx-3">
                     <i class="far fa-edit"></i>
                 </a>

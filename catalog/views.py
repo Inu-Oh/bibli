@@ -71,7 +71,7 @@ def book_listing(request):
         query = Q(title__icontains=search_val) | (Q(author__first_name__icontains=search_val)) | (Q(author__last_name__icontains=search_val)) | (Q(genre__name__icontains=search_val)) | (Q(language__name__icontains=search_val))
         book_list = Book.objects.filter(query).select_related().distinct().order_by('title')[:10]
     else:
-        book_list = Book.objects.all()
+        book_list = Book.objects.all().order_by('title')
 
     # pagination
     paginator = Paginator(book_list, 10)
@@ -324,7 +324,7 @@ class BookCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.add_book'
 
 
-class BookUpdate(PermissionRequiredMixin, CreateView):
+class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
     fields = [ 'title', 'author', 'summary', 'isbn', 'genre', 'language' ]
     permission_required = 'catalog.change_book'
@@ -368,16 +368,23 @@ class GenreUpdate(PermissionRequiredMixin, UpdateView):
 # Keep Genre deletion to admin pages
 
 
+class LanguageListView(PermissionRequiredMixin, ListView):
+    model = Language
+    permission_required = 'catalog.change_language'
+    paginate_by = 10
+
+
 class LanguageCreate(PermissionRequiredMixin, CreateView):
     model = Language
     fields = [ 'name' ]
     permission_required = 'catalog.add_language'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('languages')
 
 
 class LanguageUpdate(PermissionRequiredMixin, UpdateView):
     model = Language
     fields = [ 'name' ]
     permission_required = 'catalog.change_language'
+    success_url = reverse_lazy('languages')
 
 # Keep Language deletion to admin pages
