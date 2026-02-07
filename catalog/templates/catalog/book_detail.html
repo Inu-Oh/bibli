@@ -13,7 +13,18 @@
 
 
 {% block content %}
-<h1>Title: {{ book.title }}</h1>
+<h1>
+    Title: {{ book.title }}
+    {% if perms.catalog.change_book %}
+        <a class="ms-5 btn btn-outline-success"
+            href="{% url 'book-update' book.id %}">Edit book</a>
+    {% endif %}
+    {% if book.bookinstance_set.all.count == 0 %}
+    {% if perms.catalog.delete_book %}
+        <a class="ms-5 btn btn-outline-danger fw-bold"
+            href="{% url 'book-delete' book.id %}">Delete book</a>
+    {% endif%}{% endif %}
+</h1>
 
 <p>
     <strong>Author:</strong>
