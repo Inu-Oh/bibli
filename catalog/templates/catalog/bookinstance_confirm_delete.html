@@ -15,10 +15,10 @@
 
 <form action="" method="POST">
     {% csrf_token %}
-        <input type="submit" action="" value="Yes, delete."
-            class="btn btn-sm btn-outline-success">
+        <input type="submit" action="" value="Yes, delete." autofocus
+            class="btn btn-outline-success m-2">
         <a href="{% url 'book-detail' bookinstance.book.id %}"
-            class="btn btn-sm btn-outline-danger">Cancel</a>
+            class="btn btn-outline-danger m-2">Cancel</a>
 </form>
 
 {% endblock %}

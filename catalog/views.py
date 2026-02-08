@@ -305,7 +305,7 @@ class BookInstanceStatusUpdate(PermissionRequiredMixin, UpdateView):
         book_inst.borrower = None
         book_inst.save()
 
-        success_url = reverse_lazy('book-detail', kwargs={'pk':book.pk})
+        success_url = reverse_lazy('book-detail', kwargs={'pk':bookinst.book.pk})
         return redirect(success_url)
 
 

@@ -2,9 +2,11 @@
 
 
 {% block content %}
+{% load crispy_forms_tags %}
 
 <h1>Borrow copy: {{ bookinst.book.title }} </h1>
 
+<div class="fs-5>"
 <p><strong>Author:</strong> {{ bookinst.book.author }}</p>
 <p><strong>Imprint:</strong> {{ bookinst.imprint }}</p>
 <p><strong>ID:</strong> {{ bookinst.id }}</p>
@@ -16,10 +18,8 @@
 
 <form action="" method="post">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
+    {{ form|crispy }}
+    <input type="submit" value="Submit" class="btn btn-outline-success mt-2">
 </form>
 
 {% endblock %}
