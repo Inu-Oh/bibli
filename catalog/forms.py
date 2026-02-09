@@ -47,6 +47,11 @@ class StatusUpdateForm(forms.ModelForm):
         self.fields['status'].label = "Status"
 
 
+class ReturnBookUpdateForm(forms.ModelForm):
+    class Meta:
+        model = BookInstance
+        fields = []
+
 class BorrowBookForm(forms.ModelForm):
     class Meta:
         model = BookInstance

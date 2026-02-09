@@ -10,17 +10,30 @@
         {% endif %}
     </h1>
     {% if genre_list %}
-        <ul>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Genre</th>
+                    <th scope="col">Books</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+        <tbody>
         {% for genre in genre_list %}
-            <li>
-                {{ genre }}
-                <a href="{% url 'genre-update' genre.id %}"
-                    class="mx-3">
-                    <i class="far fa-edit"></i>
-                </a>
-            </li>
+            <tr>
+                <td>{{ genre }}</th>
+                <td>{{ genre.book_set.count }}</td>
+                <td>
+                    <a href="{% url 'genre-update' genre.id %}"
+                        class="mx-3">
+                        <i class="far fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
         {% endfor %}
-        </ul>
+        </tbody>
+
+        </table>
     {% else %}
         <p>There are no genres listed.</p>
     {% endif %}

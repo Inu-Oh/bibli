@@ -49,13 +49,12 @@
             <a href="{% url 'loan-book' copy.id %}">Lend out copy</a><br>
         {% endif %}
 
-        <a href="{% url 'status-update' copy.id %}">
-            {% if copy.status == 'o' %}
-                Return copy
-            {% else %}
-                Change status
-            {% endif %}
-        </a><br>
+        {% if copy.status == 'o' %}
+            <a href="{% url 'return-book' copy.id %}">Return copy</a>
+        {% else %}
+            <a href="{% url 'status-update' copy.id %}">Change status</a>
+        {% endif %}
+        <br>
 
         <a href="{% url 'bookinst-update' copy.id %}">Edit imprint</a><br>
 

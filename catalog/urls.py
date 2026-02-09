@@ -19,6 +19,8 @@ urlpatterns = [
     path('bookinst/<uuid:pk>/loan/', views.LoanView.as_view(), name='loan-book'),
     path('bookinst/<uuid:pk>/change_status/',
         views.BookInstanceStatusUpdate.as_view(), name='status-update'),
+    path('bookinst/<uuid:pk>/set_returned/',
+        views.BookInstanceReturnUpdate.as_view(), name='return-book'),
 
     # Author CRUD
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),

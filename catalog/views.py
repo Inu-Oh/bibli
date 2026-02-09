@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm, StatusUpdateForm
+from catalog.forms import BookInstanceForm, BorrowBookForm, RenewBookForm, StatusUpdateForm, ReturnBookUpdateForm
 from .models import Book, Author, BookInstance, Genre, Language
 
 
@@ -303,6 +303,40 @@ class BookInstanceStatusUpdate(PermissionRequiredMixin, UpdateView):
         book_inst = form.save(commit=False)
         book_inst.due_back = None
         book_inst.borrower = None
+        book_inst.save()
+
+        success_url = reverse_lazy('book-detail', kwargs={'pk':bookinst.book.pk})
+        return redirect(success_url)
+
+
+class BookInstanceReturnUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.change_bookinstance'
+    template_name = 'catalog/bookinstance_return_form.html'
+
+    def get(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        form = ReturnBookUpdateForm(instance=bookinst)
+        context = { 'form': form, 'bookinst': bookinst }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        try:
+            bookinst = BookInstance.objects.get(id=pk)
+        except:
+            raise Http404
+        form = ReturnBookUpdateForm(request.POST, instance=bookinst)
+
+        if not form.is_valid():
+            context = { 'form': form, 'bookinst': bookinst }
+            return render(request, self.template_name, context)
+
+        book_inst = form.save(commit=False)
+        book_inst.due_back = None
+        book_inst.borrower = None
+        book_inst.status = 'a'
         book_inst.save()
 
         success_url = reverse_lazy('book-detail', kwargs={'pk':bookinst.book.pk})
