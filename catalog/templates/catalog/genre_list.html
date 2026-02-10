@@ -1,14 +1,19 @@
 {% extends "base_generic.html" %}
 
 
+{% block subnav %}
+    <hr>
+    Genre admin<br>
+    {% if perms.catalog.add_genre %}
+        <a href="{% url 'genre-create' %}">Add new genre</a>
+    {% endif %}
+{% endblock %}
+
+
 {% block content %}
-    <h1>
-        <span class="pe-5">Genre list</span>
-        {% if perms.catalog.add_genre %}
-            <a class="btn btn-outline-primary mb-2 "
-                href="{% url 'genre-create' %}">Add new genre</a>
-        {% endif %}
-    </h1>
+
+    <h1>Genre list</h1>
+
     {% if genre_list %}
         <table class="table table-striped table-hover">
             <thead>
@@ -18,20 +23,20 @@
                     <th scope="col">Edit</th>
                 </tr>
             </thead>
-        <tbody>
-        {% for genre in genre_list %}
-            <tr>
-                <td>{{ genre }}</th>
-                <td>{{ genre.book_set.count }}</td>
-                <td>
-                    <a href="{% url 'genre-update' genre.id %}"
-                        class="mx-3">
-                        <i class="far fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
+            <tbody>
+            {% for genre in genre_list %}
+                <tr>
+                    <td>{{ genre }}</th>
+                    <td>{{ genre.book_set.count }}</td>
+                    <td>
+                        <a href="{% url 'genre-update' genre.id %}"
+                            class="mx-3">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
 
         </table>
     {% else %}
