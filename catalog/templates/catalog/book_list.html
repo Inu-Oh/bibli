@@ -21,20 +21,36 @@
 <main>
     <h1>Book List</h1>
 
-    <ul>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Copies</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for book in page_obj %}
-        <li>
-            <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-            ({{ book.author }})
-        </li>
+
+            <tr>
+                <td><a href="{{ book.get_absolute_url }}">
+                    {{ book.title }}
+                </a></td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.bookinstance_set.count }}</td>
+            </tr>
+
         {% empty %}
+
             {% if search %}
             <p>Your search got no results.</p>
             {% else %}
             <p>There are no books in the library.</p>
             {% endif %}
+
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
 </main>
 
 {% endblock %}
