@@ -46,11 +46,12 @@
         {% if perms.catalog.change_bookinstance %}
 
         {% if copy.status == 'a' %}
-            <a href="{% url 'loan-book' copy.id %}">Lend out copy</a><br>
+            <a href="{% url 'loan-book' copy.id %}">Lend out book</a><br>
         {% endif %}
 
         {% if copy.status == 'o' %}
-            <a href="{% url 'return-book' copy.id %}">Return copy</a>
+            <a href="{% url 'return-book' copy.id %}">Return book</a><br>
+            <a href="{% url 'renew-book-librarian' copy.id %}">Renew loan</a>
         {% else %}
             <a href="{% url 'status-update' copy.id %}">Change status</a>
         {% endif %}

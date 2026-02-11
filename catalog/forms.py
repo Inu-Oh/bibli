@@ -26,6 +26,10 @@ class RenewBookForm(forms.Form):
         # Return cleaned data.
         return data
 
+    def __init__(self, *args, **kwargs):
+        super(RenewBookForm, self).__init__(*args, **kwargs)
+        self.fields['renewal_date'].label = "Renewal date YYYY-MM-DD"
+
 
 class BookInstanceForm(forms.ModelForm):
     class Meta:
@@ -52,6 +56,7 @@ class ReturnBookUpdateForm(forms.ModelForm):
         model = BookInstance
         fields = []
 
+
 class BorrowBookForm(forms.ModelForm):
     class Meta:
         model = BookInstance
@@ -70,3 +75,4 @@ class BorrowBookForm(forms.ModelForm):
 
         # Return cleaned data.
         return data
+

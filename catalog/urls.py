@@ -15,11 +15,11 @@ urlpatterns = [
     path('borrowed/', views.LoanedBooksAllListView.as_view(), name='all-borrowed'),
 
     # Librarian views
-    path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
-    path('bookinst/<uuid:pk>/loan/', views.LoanView.as_view(), name='loan-book'),
-    path('bookinst/<uuid:pk>/change_status/',
+    path('bookcopy/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
+    path('bookcopy/<uuid:pk>/loan/', views.LoanView.as_view(), name='loan-book'),
+    path('bookcopy/<uuid:pk>/change_status/',
         views.BookInstanceStatusUpdate.as_view(), name='status-update'),
-    path('bookinst/<uuid:pk>/set_returned/',
+    path('bookcopy/<uuid:pk>/set_returned/',
         views.BookInstanceReturnUpdate.as_view(), name='return-book'),
 
     # Author CRUD
@@ -34,8 +34,8 @@ urlpatterns = [
 
     # Book Instance CRUD
     path('book/<int:pk>/bookinst/create/', views.BookInstanceCreate.as_view(), name='bookinst-create'),
-    path('bookinst/<uuid:pk>/update/', views.BookInstanceUpdate.as_view(), name='bookinst-update'),
-    path('bookinst/<uuid:pk>/delete/', views.BookInstanceDelete.as_view(), name='bookinst-delete'),
+    path('bookcopy/<uuid:pk>/update/', views.BookInstanceUpdate.as_view(), name='bookinst-update'),
+    path('bookcopy/<uuid:pk>/delete/', views.BookInstanceDelete.as_view(), name='bookinst-delete'),
 
     # Genre CRUD - no delete page except on admin site
     path('genres/', views.GenreListView.as_view(), name='genres'),

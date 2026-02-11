@@ -140,7 +140,9 @@ def renew_book_librarian(request, pk):
             book_instance.due_back = form.cleaned_data['renewal_date']
             book_instance.save()
 
-            return HttpResponseRedirect(reverse('all-borrowed'))
+            return HttpResponseRedirect(
+                reverse('book-detail', kwargs={"pk":book_instance.book.pk})
+            )
 
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
@@ -148,7 +150,7 @@ def renew_book_librarian(request, pk):
 
     context = { 'form': form, 'book_instance': book_instance, }
 
-    return render(request, 'catalog/book_renew_librarian.html', context)
+    return render(request, 'catalog/bookinstance_renew_librarian.html', context)
 
 
 class LoanView(PermissionRequiredMixin, UpdateView):
