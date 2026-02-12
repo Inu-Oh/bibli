@@ -67,9 +67,14 @@
         {% endif %}{% endif %}
     </div>
     <div class="col-9 fs-5">
-        <p><strong class="me-3">Status:</strong> <span
-            class="{% if copy.status == 'a' %}text-success fw-bold{% elif copy.status == 'm' %}text-danger fw-bold{% else %}text-warning fw-bold{% endif %}">
-            {{ copy.get_status_display }}</span>
+        <p><strong class="me-3">Status:</strong>
+            {% if copy.is_overdue %}
+            <span class="text-danger fw-bold">Overdue</span>
+            {% else %}
+            <span
+                class="{% if copy.status == 'a' %}text-success fw-bold{% elif copy.status == 'm' %}text-danger fw-bold{% else %}text-warning fw-bold{% endif %}">
+                {{ copy.get_status_display }}</span>
+            {% endif %}
             {% if copy.status == 'o' %}
                 <span class="text-secondary fw-normal p-3">
                     Due to be returned: {{ copy.due_back }}
