@@ -2,21 +2,41 @@
 
 
 {% block content %}
-    <h1>Borrowed books</h1>
 
-    {% if bookinstance_list %}
-        <ul>
-            {% for bookinst in bookinstance_list %}
-            <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+<h1>My borrowed books</h1>
+
+{% if bookinstance_list %}
+<table class="table table-striped table-hover">
+
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Due back</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for bookinst in bookinstance_list %}
+        <tr>
+            <td>
                 <a href="{% url 'book-detail' bookinst.book.pk %}">
                     {{ bookinst.book.title }}
                 </a>
-                ({{ bookinst.due_back }})
-            </li>
-            {% endfor %}
-        </ul>
+            </td>
+            <td>
+                <span
+                    class="{% if bookinst.is_overdue %}text-danger fw-bold{% endif %}">
+                    {{ bookinst.due_back }}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 
-    {% else %}
-        <p>You have not borrowed any books.</p>
-    {% endif %}
+</table>
+
+{% else %}
+    <p>There are no books borrowed.</p>
+{% endif %}
+
 {% endblock %}

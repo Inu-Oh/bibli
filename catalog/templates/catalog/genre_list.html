@@ -26,7 +26,7 @@
             <tbody>
             {% for genre in genre_list %}
                 <tr>
-                    <td>{{ genre }}</th>
+                    <td>{{ genre }}</td>
                     <td>{{ genre.book_set.count }}</td>
                     <td>
                         <a href="{% url 'genre-update' genre.id %}"
