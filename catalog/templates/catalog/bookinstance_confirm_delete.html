@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+
+<h1>Delete copy: {{ bookinstance.book.title }}</h1>
+
+<p>Are you sure you want to delete this copy of
+    {{ bookinstance.book.title }} by {{ bookinstance.book.author }}?
+</p>
+<p>
+    <strong>Imprint:</strong> {{ bookinstance.imprint }}<br>
+    <strong>ID:</strong> {{ bookinstance.id }}
+</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+        <input type="submit" action="" value="Yes, delete." autofocus
+            class="btn btn-outline-success m-2">
+        <a href="{% url 'book-detail' bookinstance.book.id %}"
+            class="btn btn-outline-danger m-2">Cancel</a>
+</form>
+
+{% endblock %}

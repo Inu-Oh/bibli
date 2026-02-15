@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+<h1>Register / edit book copy for</h1><br>
+
+<p class="fs-4"><strong>Title</strong>: {{ book }}</p>
+<p class="fs-4"><strong>Author</strong>: {{ book.author }}</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Submit" class="btn btn-outline-primary mt-2" />
+</form>
+{% endblock %}

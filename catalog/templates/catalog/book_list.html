@@ -1,0 +1,56 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+
+<header style="float:right" class="me-5">
+    <!-- Search button https://www.w3schools.com/howto/howto_css_search_button.asp -->
+    <form method="get" class="m-3 input-group">
+        <input type="text" placeholder="Search ..." name="search" class="form-control"
+            {% if search %} value="{{ search }}" {% endif %} >
+        <button type="submit" class="btn btn-sm btn-success muted-link-style">
+            <i class="fa fa-search"></i>
+        </button>
+        <a href="{% url 'books' %}"
+            class="btn btn-sm btn-outline-dark link-style pt-2">
+            <i class="fa fa-undo"></i>
+        </a>
+    </form>
+</header>
+
+<main>
+    <h1>Book List</h1>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Copies</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in page_obj %}
+
+            <tr>
+                <td><a href="{{ book.get_absolute_url }}">
+                    {{ book.title }}
+                </a></td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.bookinstance_set.count }}</td>
+            </tr>
+
+        {% empty %}
+
+            {% if search %}
+            <p>Your search got no results.</p>
+            {% else %}
+            <p>There are no books in the library.</p>
+            {% endif %}
+
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+
+{% endblock %}

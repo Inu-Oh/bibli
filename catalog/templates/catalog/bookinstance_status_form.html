@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h1>Change book status: {{ bookinst.book.title }} </h1>
+
+<div class="fs-5>"
+<p><strong>Author:</strong> {{ bookinst.book.author }}</p>
+<p><strong>Imprint:</strong> {{ bookinst.imprint }}</p>
+<p><strong>ID:</strong> {{ bookinst.id }}</p>
+<br>
+<p class="text-danger fw-bold">
+    Warning: The book's due back date will be set to null and<br> book will be
+    set as returned by borrower,<br> i.e. borrower will be set to null.
+</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Submit" class="btn btn-outline-success mt-2">
+</form>
+
+{% endblock %}

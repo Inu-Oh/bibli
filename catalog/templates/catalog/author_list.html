@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Author List</h1>
+
+{% if author_list %}
+<table class="table table-striped table-hover">
+
+    <thead>
+        <tr>
+            <th scope="col">Author</th>
+            <th scope="col">Born</th>
+            <th scope="col">Passed</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for author in author_list %}
+        <tr>
+            <td><a href="{{ author.get_absolute_url }}">{{ author }}</a></td>
+            <td>{{ author.date_of_birth|default_if_none:"" }}</td>
+            <td>{{ author.date_of_death|default_if_none:"" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% else %}
+    <p>There are no author names listed in the library.</p>
+{% endif %}
+
+{% endblock %}

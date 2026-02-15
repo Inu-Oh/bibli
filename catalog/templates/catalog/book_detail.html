@@ -1,0 +1,91 @@
+{% extends "base_generic.html" %}
+
+
+{% block subnav %}
+
+<hr>Book admin<br>
+
+    {% if perms.catalog.change_book %}
+        <a href="{% url 'book-update' book.id %}">Edit book</a><br>
+    {% endif %}
+    {% if perms.catalog.add_bookinstance %}
+        <a href="{% url 'bookinst-create' book.id %}">Add new copy</a><br>
+    {% endif %}
+    {% if book.bookinstance_set.all.count == 0 %}
+    {% if perms.catalog.delete_book %}
+        <a class="text-danger fw-bold"
+            href="{% url 'book-delete' book.id %}">Delete book</a>
+    {% endif%}{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+<header>
+    <h1>Title: {{ book.title }}</h1>
+
+    <p>
+        <strong class="me-3 fs-5">Author:</strong>
+            <a href="{{ book.author.get_absolute_url }}"
+                class="fs-5">{{ book.author }}</a><br>
+        <strong class="me-3">Summary:</strong> {{ book.summary }}<br>
+        <strong class="me-3">ISBN:</strong> {{ book.isbn }}<br>
+        <strong class="me-3">Language:</strong> {{ book.language }}<br>
+        <strong class="me-3">Genre:</strong> {{ book.genre.all|join:", " }}
+    </p>
+</header>
+
+<main>
+<h4>Copies</h4>
+
+{% for copy in book.bookinstance_set.all %}
+<hr />
+<div class="containter">
+  <div class="row">
+    <div class="col-3">
+        {% if perms.catalog.change_bookinstance %}
+
+        {% if copy.status == 'a' %}
+            <a href="{% url 'loan-book' copy.id %}">Lend out book</a><br>
+        {% endif %}
+
+        {% if copy.status == 'o' %}
+            <a href="{% url 'return-book' copy.id %}">Return book</a><br>
+            <a href="{% url 'renew-book-librarian' copy.id %}">Renew loan</a>
+        {% else %}
+            <a href="{% url 'status-update' copy.id %}">Change status</a>
+        {% endif %}
+        <br>
+
+        <a href="{% url 'bookinst-update' copy.id %}">Edit imprint</a><br>
+
+        {% endif %}
+
+        {% if perms.catalog.delete_bookinstance %}
+        {% if copy.status == 'a' or copy.status == 'm' %}
+        <a href="{% url 'bookinst-delete' copy.id %}"class="text-danger fw-bold">Delete copy</a>
+        {% endif %}{% endif %}
+    </div>
+    <div class="col-9 fs-5">
+        <p><strong class="me-3">Status:</strong>
+            {% if copy.is_overdue %}
+            <span class="text-danger fw-bold">Overdue</span>
+            {% else %}
+            <span
+                class="{% if copy.status == 'a' %}text-success fw-bold{% elif copy.status == 'm' %}text-danger fw-bold{% else %}text-warning fw-bold{% endif %}">
+                {{ copy.get_status_display }}</span>
+            {% endif %}
+            {% if copy.status == 'o' %}
+                <span class="text-secondary fw-normal p-3">
+                    Due to be returned: {{ copy.due_back }}
+                </span>
+            {% endif %}<br>
+        <strong class="me-3">Imprint:</strong> {{ copy.imprint }}<br>
+        <strong class="me-3">ID:</strong> <span class="text-muted">{{ copy.id }}</span></p>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+</main>
+{% endblock %}

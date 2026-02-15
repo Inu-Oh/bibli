@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h1>Edit language: {{ language }}</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Submit" class="btn btn-outline-primary mt-2" />
+</form>
+{% endblock %}

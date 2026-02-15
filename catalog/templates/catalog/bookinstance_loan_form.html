@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<h1>Lend out book: {{ bookinst.book.title }} </h1>
+
+<div class="fs-5">
+    <p><strong>Author:</strong> {{ bookinst.book.author }}</p>
+    <p><strong>Imprint:</strong> {{ bookinst.imprint }}</p>
+    <p><strong>ID:</strong> {{ bookinst.id }}</p>
+</div>
+
+<br>
+<p>Book will be due back {{ due_back }}</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Submit" class="btn btn-outline-primary mt-2">
+</form>
+
+{% endblock %}
